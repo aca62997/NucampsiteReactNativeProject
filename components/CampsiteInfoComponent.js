@@ -197,7 +197,7 @@ class CampsiteInfo extends Component {
             <View style={{ margin: 10 }}>
               <Button
                 onPress={() => {
-                  this.handleComment();
+                  this.handleComment(campsiteId);
                   this.resetForm();
                 }}
                 color="#5637DD"
