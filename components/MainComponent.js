@@ -16,7 +16,7 @@ import { Icon } from "react-native-elements";
 import SafeAreaView from "react-native-safe-area-view";
 import { connect } from "react-redux";
 import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners, } from "../redux/ActionCreators";
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoCellularGeneration } from '@react-native-community/netinfo';
 
 const mapDispatchToProps = {
   fetchCampsites,
@@ -323,12 +323,7 @@ class Main extends Component {
     this.props.fetchPromotions();
     this.props.fetchPartners();
 
-    NetInfo.fetch().then(connectionInfo => {
-      (Platform.OS === 'ios')
-          ? Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
-          : ToastAndroid.show('Initial Network Connectivity Type: ' +
-              connectionInfo.type, ToastAndroid.LONG);
-    });
+    this.showNetInfo();
 
     this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
       this.handleConnectivityChange(connectionInfo);
@@ -357,7 +352,16 @@ class Main extends Component {
     }
     (Platform.OS === 'ios')
         ? Alert.alert('Connection change:', connectionMsg)
-        : ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+      : ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+  }
+
+    async showNetInfo() {
+    const connectionInfo = await NetInfo.fetch()
+        
+      (Platform.OS === 'ios')
+          ? Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
+          : ToastAndroid.show('Initial Network Connectivity Type: ' +
+              connectionInfo.type, ToastAndroid.LONG);
   }
 
   render() {
